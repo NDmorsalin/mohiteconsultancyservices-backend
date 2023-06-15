@@ -5,8 +5,10 @@ const addTask = async (req, res, next) => {
         title,
         description,
         status,
-        uid,
+        // uid,
     } = req.body;
+    const uid = req.headers.uid
+    console.log('uid', uid);
     try {
         const task = await Task({
             title,
@@ -16,7 +18,7 @@ const addTask = async (req, res, next) => {
         });
 
         await task.save()
-        console.log('task', task);
+
         res.status(201).json({
             message: 'Task created',
             task,
@@ -24,7 +26,7 @@ const addTask = async (req, res, next) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            message: 'Something went wrong.',
+            message: error.message,
             error,
         });
     }
@@ -32,8 +34,9 @@ const addTask = async (req, res, next) => {
 
 const getTasks = async (req, res, next) => {
     const uid = req.headers.uid
+    
     try {
-        const tasks = await Task.find({});
+        const tasks = await Task.find({uid});
         // console.log('tasks all', tasks);
         res.status(200).json(tasks);
     } catch (error) {
@@ -62,11 +65,11 @@ const updateTask = async (req, res, next) => {
                 description,
                 status,
             }
-        },{
+        }, {
             new: true,
         });
 
-       
+
         res.status(201).json({
             message: 'Task created',
             updatedTask,
@@ -82,10 +85,26 @@ const updateTask = async (req, res, next) => {
 
 
 // delete task
-
+const deleteTask = async (req, res, next) => {
+    const taskId = req.params.id
+    try {
+        const deletedTask = await Task.findByIdAndDelete(taskId);
+        res.status(201).json({
+            message: 'Task deleted',
+            deletedTask,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Something went wrong.',
+            error,
+        });
+    }
+}
 
 module.exports = {
     getTasks,
     addTask,
     updateTask,
+    deleteTask
 }

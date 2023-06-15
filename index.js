@@ -15,11 +15,12 @@ const app = express();
         middleware 
 *************************/
 // enable cors
-app.use(cors({
-    // origin: '*', // allow all origins    
-    origin: process.env.CLIENT_URL, // allow all origins    
-    credentials: true
-}))
+const corsOptions = {
+    origin: '*',
+    credentials: true,
+    optionSuccessStatus: 200,
+}
+app.use(cors(corsOptions))
 
 app.use(cookieParser(process.env.COOKI_SECRET))
 

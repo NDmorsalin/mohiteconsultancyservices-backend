@@ -1,4 +1,4 @@
-const {Schema,model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const taskSchema = new Schema({
   title: {
@@ -6,7 +6,7 @@ const taskSchema = new Schema({
     required: [true, 'Title is required.'],
     trim: true,
     maxlength: [100, 'Title cannot exceed 100 characters.'],
-    minlength: [5, 'Title must be at least 2 characters.'],
+    minlength: [5, 'Title must be at least 5 characters.'],
   },
   description: {
     type: String,
@@ -17,18 +17,18 @@ const taskSchema = new Schema({
   status: {
     type: String,
     enum: {
-      values: ['pending','progress', 'completed'],
+      values: ['pending', 'progress', 'completed'],
       message: 'Status must be either "pending" or "completed".',
     },
     default: 'pending',
   },
-//   todo enable it later
-  /* uid: {
+  //   todo enable it later
+  uid: {
     type: String,
     required: [true, 'UID is required.'],
-  }, */
-},{
-    timestamps: true,
+  },
+}, {
+  timestamps: true,
 });
 
 const Task = model('Task', taskSchema);
